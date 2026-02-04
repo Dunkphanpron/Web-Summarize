@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            padding: 40px;
+        }
+
+        .dashboard-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            color: #333;
+        }
+
+        .user-info {
+            color: #666;
+        }
+
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .content {
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>แดชบอร์ด</h1>
+            <div class="user-info">
+                <span>ยินดีต้อนรับ, <strong>
+                        <%= user.username %>
+                    </strong>!</span>
+                <a href="/logout" class="logout-btn">ออกจากระบบ</a>
+            </div>
+        </header>
+
+        <div class="content">
+            <p>คุณได้ทำการยืนยันตัวตนผ่าน Session เรียบร้อยแล้ว</p>
+
+            <div class="card">
+                <h3>เนื้อหาที่ได้รับการป้องกัน</h3>
+                <p>เนื้อหานี้จะแสดงเฉพาะผู้ใช้งานที่ล็อกอินแล้วเท่านั้น หากคุณเห็นข้อความนี้ แสดงว่าระบบ Session
+                    Authentication ทำงานถูกต้อง</p>
+            </div>
+
+            <div class="card">
+                <h3>ทดสอบ Token API (JWT)</h3>
+                <p>คุณสามารถใช้ข้อมูลชุดเดียวกันสำหรับการทดสอบ API</p>
+                <p><strong>ชื่อผู้ใช้:</strong> admin<br><strong>รหัสผ่าน:</strong> password123</p>
+                <p><em>ใช้โปรแกรมเช่น Postman หรือคำสั่ง 'curl' เพื่อทดสอบ JWT Endpoints</em></p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

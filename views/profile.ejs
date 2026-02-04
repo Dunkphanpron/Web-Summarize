@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โปรไฟล์</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <header>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <!-- Placeholder Avatar -->
+                <div
+                    style="width: 40px; height: 40px; background: #e0e7ff; color: #4f46e5; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                    <%= user.username.charAt(0).toUpperCase() %>
+                </div>
+                <div>
+                    <h1 style="margin: 0; font-size: 1.5rem;">แดชบอร์ด</h1>
+                    <span class="text-muted" style="font-size: 0.9rem;">ยินดีต้อนรับคุณ <%= user.username %></span>
+                </div>
+            </div>
+            <a href="/auth/logout" class="btn logout-btn">ออกจากระบบ</a>
+        </header>
+
+        <div class="content">
+            <div class="card">
+                <h3>👤 ข้อมูลส่วนตัว</h3>
+                <div style="display: grid; grid-template-columns: 100px 1fr; gap: 1rem; align-items: center;">
+                    <strong style="color: #6b7280;">User ID:</strong>
+                    <span>#<%= user.id %></span>
+
+                    <strong style="color: #6b7280;">Username:</strong>
+                    <span>
+                        <%= user.username %>
+                    </span>
+
+                    <strong style="color: #6b7280;">Role:</strong>
+                    <span
+                        style="display: inline-block; background: #d1fae5; color: #065f46; padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.85rem; width: fit-content;">
+                        <%= user.role %>
+                    </span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🔑 API & Security (JWT)</h3>
+                <p>คุณสามารถใช้ Token นี้ในการเข้าถึง API ส่วนตัวได้</p>
+                <div
+                    style="background: #1f2937; color: #10b981; padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.9rem; overflow-x: auto;">
+                    POST /api/login<br>
+                    GET /api/profile
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
