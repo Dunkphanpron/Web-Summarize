@@ -13,11 +13,15 @@ passport.use(new LocalStrategy(
     async (username, password, done) => {
         try {
             const user = await User.findOne(username);
+
+            // Security: Use generic error message to prevent Username Enumeration
+            const genericError = { message: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง (Invalid credentials)' };
+
             if (!user) {
-                return done(null, false, { message: 'Incorrect username.' });
+                return done(null, false, genericError);
             }
             if (!bcrypt.compareSync(password, user.password)) {
-                return done(null, false, { message: 'Incorrect password.' });
+                return done(null, false, genericError);
             }
             return done(null, user);
         } catch (err) {

@@ -1,99 +1,217 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
-            padding: 40px;
-        }
-
-        .dashboard-container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            margin: 0;
-            color: #333;
-        }
-
-        .user-info {
-            color: #666;
-        }
-
-        .logout-btn {
-            background-color: #dc3545;
-            color: white;
-            padding: 8px 16px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        .content {
-            line-height: 1.6;
-            color: #444;
-        }
-
-        .card {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        h3 {
-            margin-top: 0;
-        }
-    </style>
+    <title>Pentest Estimator Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script>
+        // Simple script to retain form values if needed, though render handles it mostly
+    </script>
 </head>
 
 <body>
     <div class="dashboard-container">
         <header>
-            <h1>แดชบอร์ด</h1>
-            <div class="user-info">
-                <span>ยินดีต้อนรับ, <strong>
-                        <%= user.username %>
-                    </strong>!</span>
-                <a href="/logout" class="logout-btn">ออกจากระบบ</a>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <!-- Avatar -->
+                <div
+                    style="width: 40px; height: 40px; background: #e0e7ff; color: #4f46e5; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                    <%= user.username.charAt(0).toUpperCase() %>
+                </div>
+                <div>
+                    <h1 style="margin: 0; font-size: 1.5rem;">ประเมินราคา Pentest</h1>
+                    <span class="text-muted" style="font-size: 0.9rem;">ระบบคำนวณระยะเวลาทดสอบเจาะระบบ</span>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="/profile" class="btn btn-secondary" style="width: auto;">โปรไฟล์</a>
+                <a href="/auth/logout" class="btn logout-btn">ออกจากระบบ</a>
             </div>
         </header>
 
         <div class="content">
-            <p>คุณได้ทำการยืนยันตัวตนผ่าน Session เรียบร้อยแล้ว</p>
+            <!-- Alert Messages -->
+            <% if (error) { %>
+                <div class="error">
+                    <%= error %>
+                </div>
+                <% } %>
+                    <% if (success) { %>
+                        <div
+                            style="background-color: #d1fae5; color: #065f46; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 1.5rem; text-align: center; border: 1px solid #a7f3d0;">
+                            <%= success %>
+                        </div>
+                        <% } %>
 
-            <div class="card">
-                <h3>เนื้อหาที่ได้รับการป้องกัน</h3>
-                <p>เนื้อหานี้จะแสดงเฉพาะผู้ใช้งานที่ล็อกอินแล้วเท่านั้น หากคุณเห็นข้อความนี้ แสดงว่าระบบ Session
-                    Authentication ทำงานถูกต้อง</p>
-            </div>
+                            <% if (previewResult) { %>
+                                <!-- PREVIEW SECTION -->
+                                <div class="card"
+                                    style="border: 2px solid var(--primary-color); background-color: #f0f9ff;">
+                                    <h3 style="color: var(--primary-color);">📊 ผลการคำนวณ (Evaluation Result)</h3>
 
-            <div class="card">
-                <h3>ทดสอบ Token API (JWT)</h3>
-                <p>คุณสามารถใช้ข้อมูลชุดเดียวกันสำหรับการทดสอบ API</p>
-                <p><strong>ชื่อผู้ใช้:</strong> admin<br><strong>รหัสผ่าน:</strong> password123</p>
-                <p><em>ใช้โปรแกรมเช่น Postman หรือคำสั่ง 'curl' เพื่อทดสอบ JWT Endpoints</em></p>
-            </div>
+                                    <div
+                                        style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                                        <div>
+                                            <strong>ลูกค้า:</strong>
+                                            <%= previewResult.client_name %><br>
+                                                <strong>ประเภท:</strong>
+                                                <%= previewResult.device_type %> (<%= previewResult.test_type %>)
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <span
+                                                style="font-size: 1.5rem; font-weight: bold; color: var(--primary-color);">
+                                                <%= previewResult.estimated_days %> Man-Days
+                                            </span>
+                                            <br>
+                                            <span class="text-muted">Functions: <%= previewResult.function_count %> |
+                                                    Platforms: <%= previewResult.platform_count %></span>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: flex; gap: 1rem;">
+                                        <!-- Confirm Form -->
+                                        <form action="/dashboard/save" method="POST" style="flex: 1;">
+                                            <input type="hidden" name="client_name"
+                                                value="<%= previewResult.client_name %>">
+                                            <input type="hidden" name="device_type"
+                                                value="<%= previewResult.device_type %>">
+                                            <input type="hidden" name="test_type"
+                                                value="<%= previewResult.test_type %>">
+                                            <input type="hidden" name="function_count"
+                                                value="<%= previewResult.function_count %>">
+                                            <input type="hidden" name="platform_count"
+                                                value="<%= previewResult.platform_count %>">
+                                            <input type="hidden" name="estimated_days"
+                                                value="<%= previewResult.estimated_days %>">
+                                            <button type="submit" class="btn" style="background-color: #059669;">✔️
+                                                ยืนยันและบันทึก (Save)</button>
+                                        </form>
+
+                                        <!-- Cancel Button -->
+                                        <a href="/dashboard" class="btn"
+                                            style="flex: 1; background-color: #6b7280; line-height: 48px; padding: 0;">❌
+                                            ยกเลิก / คำนวณใหม่</a>
+                                    </div>
+                                </div>
+                                <% } else { %>
+                                    <!-- Estimation Form -->
+                                    <div class="card">
+                                        <h3>🛠️ สร้างการประเมินใหม่ (New Estimation)</h3>
+                                        <form action="/dashboard/estimate" method="POST">
+                                            <div class="form-group">
+                                                <label for="client_name">ชื่อลูกค้า (Client Name)</label>
+                                                <input type="text" id="client_name" name="client_name"
+                                                    placeholder="ระบุชื่อบริษัทลูกค้า" required>
+                                            </div>
+
+                                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                                <div class="form-group">
+                                                    <label for="device_type">ชนิดเครื่อง (Device Type)</label>
+                                                    <select id="device_type" name="device_type"
+                                                        style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; background: #f9fafb;">
+                                                        <option value="web_application">Web Application</option>
+                                                        <option value="mobile_application">Mobile Application</option>
+                                                        <option value="api_webservice">API / Webservice</option>
+                                                        <option value="infrastructure">Infrastructure</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="test_type">รูปแบบการทดสอบ (Test Type)</label>
+                                                    <select id="test_type" name="test_type"
+                                                        style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; background: #f9fafb;">
+                                                        <option value="graybox">Gray Box (มี User/Pass)</option>
+                                                        <option value="blackbox">Black Box (ไม่รู้อะไรเลย)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                                <div class="form-group">
+                                                    <label for="function_count">จำนวนฟังก์ชันหลัก (Functions)</label>
+                                                    <input type="number" id="function_count" name="function_count"
+                                                        placeholder="0" min="1" required
+                                                        style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem;">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="platform_count">จำนวน Platform (iOS/Android/Web)</label>
+                                                    <input type="number" id="platform_count" name="platform_count"
+                                                        value="1" min="1" required
+                                                        style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem;">
+                                                </div>
+                                            </div>
+
+                                            <button type="submit" class="btn">🚀 คำนวณระยะเวลา (Calculate)</button>
+                                        </form>
+                                    </div>
+                                    <% } %>
+
+                                        <!-- History Table -->
+                                        <div class="card">
+                                            <h3>📜 ประวัติการประเมิน (History)</h3>
+                                            <% if (estimations && estimations.length> 0) { %>
+                                                <div style="overflow-x: auto;">
+                                                    <table
+                                                        style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                                                        <thead>
+                                                            <tr style="background: #f3f4f6; text-align: left;">
+                                                                <th
+                                                                    style="padding: 0.75rem; border-bottom: 2px solid #e5e7eb;">
+                                                                    ลูกค้า</th>
+                                                                <th
+                                                                    style="padding: 0.75rem; border-bottom: 2px solid #e5e7eb;">
+                                                                    ประเภท</th>
+                                                                <th
+                                                                    style="padding: 0.75rem; border-bottom: 2px solid #e5e7eb;">
+                                                                    รายละเอียด</th>
+                                                                <th
+                                                                    style="padding: 0.75rem; border-bottom: 2px solid #e5e7eb; color: var(--primary-color);">
+                                                                    ระยะเวลา (Man-Days)</th>
+                                                                <th
+                                                                    style="padding: 0.75rem; border-bottom: 2px solid #e5e7eb;">
+                                                                    จัดการ</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% estimations.forEach(est=> { %>
+                                                                <tr style="border-bottom: 1px solid #e5e7eb;">
+                                                                    <td style="padding: 0.75rem;">
+                                                                        <%= est.client_name %>
+                                                                    </td>
+                                                                    <td style="padding: 0.75rem;">
+                                                                        <span
+                                                                            style="font-size: 0.85rem; font-weight: bold;">
+                                                                            <%= est.device_type %>
+                                                                        </span><br>
+                                                                        <span
+                                                                            style="font-size: 0.75rem; color: #6b7280;">
+                                                                            <%= est.test_type %>
+                                                                        </span>
+                                                                    </td>
+                                                                    <td style="padding: 0.75rem;">
+                                                                        functions: <%= est.function_count %><br>
+                                                                            platform: <%= est.platform_count %>
+                                                                    </td>
+                                                                    <td
+                                                                        style="padding: 0.75rem; font-size: 1.1rem; font-weight: bold; color: var(--primary-color);">
+                                                                        <%= est.estimated_days %> วัน
+                                                                    </td>
+                                                                    <td style="padding: 0.75rem;">
+                                                                        <a href="/dashboard/delete/<%= est.id %>"
+                                                                            style="color: var(--danger-color); text-decoration: none; font-size: 0.9rem;"
+                                                                            onclick="return confirm('ยืนยันลบข้อมูล?');">ลบ</a>
+                                                                    </td>
+                                                                </tr>
+                                                                <% }) %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <% } else { %>
+                                                    <p style="text-align: center; margin-top: 2rem;">
+                                                        ยังไม่มีประวัติการประเมิน</p>
+                                                    <% } %>
+                                        </div>
         </div>
     </div>
 </body>

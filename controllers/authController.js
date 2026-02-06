@@ -13,38 +13,6 @@ exports.loginPage = (req, res) => {
     res.render('login', { error: null });
 };
 
-exports.registerPage = (req, res) => {
-    if (req.user) {
-        return res.redirect('/profile');
-    }
-    res.render('register', { error: null });
-};
-
-exports.register = async (req, res) => {
-    const { username, password } = req.body;
-
-    try {
-        // Check if user exists (Async)
-        const existingUser = await User.findOne(username);
-        if (existingUser) {
-            return res.render('register', { error: 'ชื่อผู้ใช้นี้ถูกใช้งานแล้ว (Username already exists)' });
-        }
-
-        // Create User (Async)
-        const newUser = await User.create({ username, password });
-
-        // Auto login
-        req.login(newUser, (err) => {
-            if (err) return next(err);
-            return res.redirect('/profile');
-        });
-
-    } catch (err) {
-        console.error(err);
-        res.render('register', { error: 'เกิดข้อผิดพลาดในการลงทะเบียน' });
-    }
-};
-
 exports.login = (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) return next(err);
